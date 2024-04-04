@@ -1,4 +1,5 @@
 from accelerometer.mpu6050 import accel
+from Tester import Testable
 from machine import I2C, Pin
 import time
 
@@ -38,12 +39,14 @@ class CalculDirection:
         return direction
 
 
-class AccelGyro:
+class AccelGyro(Testable):
     def __init__(self, scl, sda, delegate) -> None:
         i2c = I2C(scl=Pin(scl), sda=Pin(sda))
         self.mpu= accel(i2c)
         self.calculator = CalculDirection()
         self.delegate = delegate
+        self.time_ms_error = 1000
+        self.margin_error = 10
 
     def process(self):
         data = self.mpu.get_values()
@@ -52,4 +55,29 @@ class AccelGyro:
             self.delegate.left()
         elif direction == "DROITE":
             self.delegate.right()
+
+    def test(self):
+        actual_time_ms = 0
+        keys = ['GyZ', 'GyY', 'GyX', 'AcZ', 'AcY', 'AcX']
+        keys_number = 6
+        last_values = None
+        variation_number = 0
+        while actual_time_ms < self.time_ms_error:
+            time.sleep(0.05)
+            actual_time_ms += 50
+            data = self.mpu.get_values()
+            if data != last_values:
+                variation_number += 1
+            last_values = data
+            if variation_number >= (self.time_ms_error / 50) / 2:
+                return True
+
+            bad_keys = []
+            for key in keys:
+                if data[key] == 0:
+                    bad_keys.append(key)
+            if len(bad_keys) == keys_number:
+                return False
+        return False
+    
         
