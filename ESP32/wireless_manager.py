@@ -1,3 +1,4 @@
+from Tester import Testable
 
 class CommunicationCallback:
     
@@ -12,9 +13,9 @@ class CommunicationCallback:
     
     def didReceiveCallback(self,value):
         print(f"Received {value}")
-    
-    
-class WirelessManager:
+
+
+class WirelessManager(Testable):
     
     def __init__(self,bleCallback = None,wsCallback = None):
         self.bleCallback = bleCallback
@@ -51,4 +52,7 @@ class WirelessManager:
     def process(self):
         if self.wsCallback != None:
             self.server.process_all()
+
+    def test(self):
+        return True
     
