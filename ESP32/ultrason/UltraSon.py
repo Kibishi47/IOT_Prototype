@@ -54,6 +54,7 @@ class UltraSon(Testable):
         self.time_ms_error = 500
 
     def process(self):
+        self.pin.process()
         pulse_duration = time.ticks_diff(self.pin.pulse_end, self.pin.pulse_start)
         distance = distance = (pulse_duration * 0.0343) / 2
         distance = round(distance, 2)
