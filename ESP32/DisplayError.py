@@ -38,10 +38,13 @@ class DisplayError:
                 sleep_ms(1000)
                 actual_time_ms += 1000 + 300*number_of_print
             else:
+                sleep_ms(1)
+                actual_time_ms += 1
                 print("")
 
     @staticmethod
     def print_x_time(number_of_print):
         for i in range(0, number_of_print):
             sleep_ms(300)
-            print("")
+            for k in range(0, 5):
+                print("")

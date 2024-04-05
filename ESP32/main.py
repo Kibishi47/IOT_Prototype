@@ -20,14 +20,24 @@ isRunnable = True
 
 wirelessManager = WirelessManager(BLECallback("Manu"),WebsocketCallback())
 button = Button(PIN_BUTTON, ClickButtonCallback(wirelessManager))
+
+# INIT ACCELEROMETER AND ULTRASON
 try:
     ag = AccelGyro(PIN_SCL, PIN_SDA, DirectionCallBack(wirelessManager))
 except:
-    DisplayError.print_error(AccelGyro.__class__.__name__)
+    isRunnable = False
+    try:
+        DisplayError.print_error(AccelGyro.__name__)
+    except KeyboardInterrupt:
+        pass
 try:
     us = UltraSon(PIN_TRIG, PIN_ECHO, DistanceCallback(wirelessManager))
 except:
-    DisplayError.print_error(UltraSon.__class__.__name__)
+    isRunnable = False
+    try:
+        DisplayError.print_error(UltraSon.__name__)
+    except KeyboardInterrupt:
+        pass
 
 if isRunnable:
     # TESTS
