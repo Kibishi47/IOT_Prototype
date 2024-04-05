@@ -1,12 +1,6 @@
-from button.Button import Button
 from button.ButtonDelegate import ButtonDelegate
-
-from accelerometer.AccelGyro import AccelGyro
 from accelerometer.AccelGyroDelegate import AccelGyroDelegate
-
-from ultrason.UltraSon import UltraSon
 from ultrason.UltraSonDelegate import UltraSonDelegate
-
 from wireless_manager import CommunicationCallback
 
 class BLECallback(CommunicationCallback):
@@ -52,7 +46,7 @@ class DirectionCallBack(AccelGyroDelegate):
         super().right()
         self.wirelessManager.sendDataToWS("d:DROITE")
 
-class ChangeClickButtonCallback(ButtonDelegate):
+class ClickButtonCallback(ButtonDelegate):
     def __init__(self, wirelessManager) -> None:
         super().__init__()
         self.wirelessManager = wirelessManager

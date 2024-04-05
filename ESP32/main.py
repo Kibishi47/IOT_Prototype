@@ -1,4 +1,9 @@
 from time import sleep_ms
+
+from button.Button import Button
+from accelerometer.AccelGyro import AccelGyro
+from ultrason.UltraSon import UltraSon
+
 from Callback import *
 from wireless_manager import *
 from Tester import TestLauncher
@@ -10,7 +15,7 @@ PIN_TRIG = 14
 PIN_ECHO = 12
 
 wirelessManager = WirelessManager(BLECallback("Manu"),WebsocketCallback())
-button = Button(PIN_BUTTON, ChangeClickButtonCallback(wirelessManager))
+button = Button(PIN_BUTTON, ClickButtonCallback(wirelessManager))
 ag = AccelGyro(PIN_SCL, PIN_SDA, DirectionCallBack(wirelessManager))
 us = UltraSon(PIN_TRIG, PIN_ECHO, DistanceCallback(wirelessManager))
 
@@ -22,9 +27,7 @@ objects_to_test = [
     us,
 ]
 
-print(TestLauncher.test_object(ag))
-
-if TestLauncher.test_objects(objects_to_test):
+if TestLauncher.debug_mode().test_objects(objects_to_test):
     try:
         # RUN
         while True:
