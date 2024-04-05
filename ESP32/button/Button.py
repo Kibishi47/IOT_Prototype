@@ -7,7 +7,7 @@ class Button(Testable):
         self.pin = Pin(nb, Pin.IN, Pin.PULL_DOWN)
         self.isPressed = False
         self.delegate = delegate
-        self.time_ms_error = 20000
+        self.time_ms_error = 10000
     
     def process(self):
         if self.pin.value() != self.isPressed:

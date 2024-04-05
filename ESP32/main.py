@@ -8,6 +8,8 @@ from Callback import *
 from wireless_manager import *
 from Tester import TestLauncher
 
+from DisplayError import DisplayError
+
 PIN_BUTTON = 33
 PIN_SCL = 22
 PIN_SDA = 21
@@ -21,13 +23,13 @@ us = UltraSon(PIN_TRIG, PIN_ECHO, DistanceCallback(wirelessManager))
 
 # TESTS
 objects_to_test = [
-    wirelessManager,
     button,
     ag,
     us,
+    wirelessManager,
 ]
-
-if TestLauncher.debug_mode().test_objects(objects_to_test):
+testLauncher = TestLauncher.debug_mode()
+if testLauncher.test_objects(objects_to_test):
     try:
         # RUN
         while True:
@@ -40,4 +42,9 @@ if TestLauncher.debug_mode().test_objects(objects_to_test):
     except KeyboardInterrupt:
         pass
 else:
-    print("ERROR")
+    try:
+        displayError = DisplayError()
+        while displayError.print_error(testLauncher.get_class_name()):
+            sleep_ms(1000)
+    except KeyboardInterrupt:
+        pass
