@@ -16,35 +16,42 @@ PIN_SDA = 21
 PIN_TRIG = 14
 PIN_ECHO = 12
 
+isRunnable = True
+
 wirelessManager = WirelessManager(BLECallback("Manu"),WebsocketCallback())
 button = Button(PIN_BUTTON, ClickButtonCallback(wirelessManager))
-ag = AccelGyro(PIN_SCL, PIN_SDA, DirectionCallBack(wirelessManager))
-us = UltraSon(PIN_TRIG, PIN_ECHO, DistanceCallback(wirelessManager))
+try:
+    ag = AccelGyro(PIN_SCL, PIN_SDA, DirectionCallBack(wirelessManager))
+except:
+    DisplayError.print_error(AccelGyro.__class__.__name__)
+try:
+    us = UltraSon(PIN_TRIG, PIN_ECHO, DistanceCallback(wirelessManager))
+except:
+    DisplayError.print_error(UltraSon.__class__.__name__)
 
-# TESTS
-objects_to_test = [
-    button,
-    ag,
-    us,
-    wirelessManager,
-]
-testLauncher = TestLauncher.debug_mode()
-if testLauncher.test_objects(objects_to_test):
-    try:
-        # RUN
-        while True:
-            button.process()
-            ag.process()
-            us.process()
-            wirelessManager.process()
-            sleep_ms(50)
+if isRunnable:
+    # TESTS
+    objects_to_test = [
+        button,
+        ag,
+        us,
+        wirelessManager,
+    ]
+    testLauncher = TestLauncher.debug_mode()
+    if testLauncher.test_objects(objects_to_test):
+        try:
+            # RUN
+            while True:
+                button.process()
+                ag.process()
+                us.process()
+                wirelessManager.process()
+                sleep_ms(50)
 
-    except KeyboardInterrupt:
-        pass
-else:
-    try:
-        displayError = DisplayError()
-        while displayError.print_error(testLauncher.get_class_name()):
-            sleep_ms(1000)
-    except KeyboardInterrupt:
-        pass
+        except KeyboardInterrupt:
+            pass
+    else:
+        try:
+            DisplayError.print_error(testLauncher.get_class_name())
+        except KeyboardInterrupt:
+            pass
