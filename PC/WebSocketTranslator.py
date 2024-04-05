@@ -1,11 +1,11 @@
 class WebSocketTranslator:
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super(WebSocketTranslator, cls).__new__(cls, *args, **kwargs)
-            cls._instance.initialize()
-        return cls._instance
+    def __init__(self) -> None:
+        self.isKeyDown = False
+        self.isKeyUp = False
+        self.isKeyLeft = False
+        self.isKeyRight = False
 
     def initialize(self):
         self.isKeyDown = False
@@ -14,10 +14,10 @@ class WebSocketTranslator:
         self.isKeyRight = False
 
     def calcul(self, message):
+        print(f"calcul: {message}")
         if message == "none":
             self.initialize()
         else:
-            print(message)
             partsMessage = message.split(":")
             if partsMessage[0] == "u":
                 if partsMessage[1] == "true":

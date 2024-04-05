@@ -1,7 +1,7 @@
 import pygame
 import random
 from WebSocketTranslator import WebSocketTranslator
-from WebSocketClient import WebSocketClient, WebSocketDelegate
+from WebSocketClient import *
 
 colors = [
     (0, 0, 0),
@@ -12,7 +12,6 @@ colors = [
     (180, 34, 22),
     (180, 34, 122),
 ]
-
 
 class Figure:
     x = 0
@@ -135,8 +134,20 @@ class WebSocketCallback(WebSocketDelegate):
         self.translator = translator
 
     def on_message(self, message):
+        super().on_message(message)
         if message is not None:
             self.translator.calcul(message)
+
+def setupWebSocketClient(translator):
+    websocket.enableTrace(True)
+    uri = "ws://192.168.232.92:80"
+    delegate = WebSocketCallback(translator)
+    client = WebSocketClient(uri, delegate)
+    client.start()
+
+translator = WebSocketTranslator()
+setupWebSocketClient(translator)
+
 
 # Initialize the game engine
 pygame.init()
@@ -160,10 +171,6 @@ counter = 0
 
 pressing_down = False
 
-translator = WebSocketTranslator()
-ws_client = WebSocketClient(url="ws://192.168.232.92:80", delegate=WebSocketCallback(translator))
-ws_client.start()
-
 
 while not done:
     if game.figure is None:
@@ -176,8 +183,6 @@ while not done:
         if game.state == "start":
             game.go_down()
 
-
-    # print(translator.toJSON())
     if translator.isKeyUp:
         game.rotate()
         translator.isKeyUp = False
@@ -246,6 +251,4 @@ while not done:
     pygame.display.flip()
     clock.tick(fps)
 
-ws_client.stop()
-ws_client.join()
 pygame.quit()
