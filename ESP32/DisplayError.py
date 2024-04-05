@@ -5,6 +5,7 @@ BUTTON ERROR: Double flash
 ACCELEROMETER ERROR: Triple flash
 ULTRASON ERROR: Quadruple flash
 
+
 ALL SPACE BY 1 SECOND
 """
 
@@ -34,17 +35,17 @@ class DisplayError:
         while actual_time_ms < time_ms_printing_error:
             if class_name in ErrorType.DICT:
                 number_of_print = ErrorType.DICT[class_name]
-                DisplayError.print_x_time(number_of_print)
+                DisplayError.print_x_time(number_of_print, class_name)
                 sleep_ms(1000)
                 actual_time_ms += 1000 + 300*number_of_print
             else:
                 sleep_ms(1)
                 actual_time_ms += 1
-                print("")
+                print("CLASS NAME UNKNOWN")
 
     @staticmethod
-    def print_x_time(number_of_print):
+    def print_x_time(number_of_print, class_name):
         for i in range(0, number_of_print):
             sleep_ms(300)
             for k in range(0, 5):
-                print("")
+                print(class_name)
