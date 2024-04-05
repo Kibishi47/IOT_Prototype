@@ -1,6 +1,6 @@
 import network
 
-NEED_WIFI = False
+NEED_WIFI = True
 
 def connect_wifi(ssid, password):
     wlan = network.WLAN(network.STA_IF)  # Crée un objet WLAN en mode STA
