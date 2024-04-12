@@ -1,4 +1,5 @@
 from button.ButtonDelegate import ButtonDelegate
+from rfid.RfidDelegate import RfidDelegate
 from wireless_manager import CommunicationCallback
 
 class BLECallback(CommunicationCallback):
@@ -41,3 +42,10 @@ class ClickButtonCallback(ButtonDelegate):
     def long_click(self):
         pass
 
+class RfidCallback(RfidDelegate):
+    def __init__(self, wirelessManager) -> None:
+        super().__init__()
+        self.wirelessManager = wirelessManager
+
+    def rfid_detected(self, rfid_id):
+        self.wirelessManager.sendDataToWS(rfid_id)
