@@ -11,15 +11,15 @@ from DisplayError import DisplayError
 
 PIN_BUTTON = 33
 
-wirelessManager = WirelessManager(BLECallback("Manu"),WebsocketCallback())
+wirelessManager = WirelessManager(wsCallback=WebsocketCallback())
 button = Button(PIN_BUTTON, ClickButtonCallback(wirelessManager))
 rfid = Rfid(RfidCallback(wirelessManager))
 
 # TESTS
 objects_to_test = [
-    wirelessManager,
     rfid,
     button,
+    wirelessManager,
 ]
 testLauncher = TestLauncher.debug_mode()
 if testLauncher.test_objects(objects_to_test):

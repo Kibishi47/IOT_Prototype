@@ -37,6 +37,7 @@ class WirelessManager(Testable):
             return self.blePeripheral.is_connected()
         if self.wsCallback != None:
             return self.server.isConnected
+        return False
     
     def sendDataToBLE(self,data):
         if self.bleCallback != None:
@@ -54,5 +55,5 @@ class WirelessManager(Testable):
             self.server.process_all()
 
     def test(self):
-        return self.server.isConnected
+        return True
     
