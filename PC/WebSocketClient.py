@@ -59,7 +59,6 @@ class MyWebSocketDelegate(WebSocketDelegate):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    uri = "ws://192.168.232.92:80"
-    delegate = MyWebSocketDelegate()
-    client = WebSocketClient(uri, delegate)
+    uri = "ws://192.168.42.92:80"
+    client = WebSocketClient(uri, MyWebSocketDelegate())
     client.start()
