@@ -13,7 +13,7 @@ class CalculButton:
             300, # Delta 1
             90 # Delta 2
         ]
-        self.longClickDelta = 1000
+        self.longClickDelta = 750
         self.clickedTimes = [0] * 4
 
     def checkIsDoubleClick(self, numberOfTheChangement):
@@ -94,7 +94,7 @@ class Button(Testable):
         if self.detectionMode == DetectionMode.DOUBLE_CLICK or self.detectionMode == DetectionMode.DOUBLE_AND_LONG_CLICK:
             isDoubleClick = self.calcul.checkIsDoubleClick(self.numberOfTheChangement)
         if self.detectionMode == DetectionMode.LONG_CLICK or self.detectionMode == DetectionMode.DOUBLE_AND_LONG_CLICK:
-            if not self.isPressed:
+            if not self.isPressed and self.lastTimePressed is not None:
                 isLongClick = self.calcul.checkIsLongClick(self.lastTimePressed)
         if self.debug:
             print(self.calcul.clickedTimes)
