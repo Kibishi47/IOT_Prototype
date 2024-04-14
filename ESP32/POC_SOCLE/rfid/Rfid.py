@@ -12,7 +12,8 @@ class Rfid(Testable):
 
     def process(self):
         actual_time = time.ticks_ms()
-        if actual_time > self.lastTimeDetected + 5000:
+        if actual_time > self.lastTimeDetected + 3000:
+            self.lastTimeDetected = actual_time
             self.delegate.rfid_detected(random.choice(self.id_test))
 
     def test(self):
