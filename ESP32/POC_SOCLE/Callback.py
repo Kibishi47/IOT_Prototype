@@ -37,10 +37,10 @@ class ClickButtonCallback(ButtonDelegate):
         self.wirelessManager = wirelessManager
 
     def short_click(self):
-        pass
+        print("short_click")
 
     def long_click(self):
-        pass
+        print("long_click")
 
 class RfidCallback(RfidDelegate):
     def __init__(self, wirelessManager) -> None:
