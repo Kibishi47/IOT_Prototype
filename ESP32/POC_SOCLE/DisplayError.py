@@ -1,14 +1,15 @@
 """ 
 NO ERROR: No flashing
-WIRELESS MANAGER ERROR: Single flash
+WIRELESS MANAGER // WEB SOCKET CLIENT ERROR: Single flash
 BUTTON ERROR: Double flash
 ACCELEROMETER ERROR: Triple flash
 ULTRASON ERROR: Quadruple flash
+RFID ERROR: Pentuple flash
 
 ALL SPACE BY 1 SECOND
 """
 
-from time import sleep_ms
+import time
 
 class ErrorType:
     WIRELESSMANAGER = "WirelessManager"
@@ -18,9 +19,11 @@ class ErrorType:
 
     DICT = {
         "WirelessManager": 1,
+        "WebSocketClient": 1,
         "Button": 2,
         "AccelGyro": 3,
-        "UltraSon": 4
+        "UltraSon": 4,
+        "Rfid": 5
     }
 
 class DisplayError:
@@ -35,16 +38,16 @@ class DisplayError:
             if class_name in ErrorType.DICT:
                 number_of_print = ErrorType.DICT[class_name]
                 DisplayError.print_x_time(number_of_print)
-                sleep_ms(1000)
+                time.sleep(1)
                 actual_time_ms += 1000 + 300*number_of_print
             else:
-                sleep_ms(1)
+                time.sleep(0.001)
                 actual_time_ms += 1
                 print("")
 
     @staticmethod
     def print_x_time(number_of_print):
         for i in range(0, number_of_print):
-            sleep_ms(300)
+            time.sleep(0.3)
             for k in range(0, 5):
                 print("")

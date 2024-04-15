@@ -1,4 +1,4 @@
-from machine import Pin
+import RPi.GPIO as GPIO
 import time
 from Tester import Testable
 
@@ -17,7 +17,7 @@ class CalculButton:
         self.clickedTimes = [0] * 4
 
     def checkIsDoubleClick(self, numberOfTheChangement):
-        self.clickedTimes[numberOfTheChangement] = time.ticks_ms()
+        self.clickedTimes[numberOfTheChangement] = time.time() * 1000
         if numberOfTheChangement == 0:
             return None
         if numberOfTheChangement == 1:
@@ -52,15 +52,16 @@ class CalculButton:
     def checkIsLongClick(self, lastTimeClick):
         if len(self.clickedTimes) > 1:
             maxTime = lastTimeClick + self.longClickDelta
-            return not time.ticks_ms() <= maxTime
+            return not time.time() * 1000 <= maxTime
         return True
     
     def resetClickedTimes(self):
         self.clickedTimes = [0] * 4
 
+
 class Button(Testable):
     def __init__(self, nb, delegate, debug = False, detectionMode = DetectionMode.LONG_CLICK) -> None:
-        self.pin = Pin(nb, Pin.IN, Pin.PULL_DOWN)
+        self.nb = nb
         self.isPressed = False
         self.numberOfTheChangement = -1
         self.calcul = CalculButton()
@@ -71,19 +72,25 @@ class Button(Testable):
         self.detectionMode = detectionMode
         self.delegate = delegate
         self.time_ms_error = 10000
+        self.setup()
+
+    def setup(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.nb, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def process(self):
         self.checkChangement()
         
 
     def checkChangement(self):
-        if self.pin.value() != self.isPressed:
+        status = GPIO.input(self.nb) == GPIO.HIGH
+        if status != self.isPressed:
             self.isPressed = not self.isPressed
             self.hasChange()
             
 
     def hasChange(self):
-        changeTime = time.ticks_ms()
+        changeTime = time.time() * 1000
         self.numberOfTheChangement += 1
         isDoubleClick = None
         isLongClick = None
@@ -133,7 +140,7 @@ class Button(Testable):
         while actual_time_ms < self.time_ms_error:
             time.sleep(0.05)
             actual_time_ms += 50
-            if self.pin.value() == 1:
+            if GPIO.input(self.nb) == GPIO.HIGH:
                 self.isPressed = True
                 return True
         return False

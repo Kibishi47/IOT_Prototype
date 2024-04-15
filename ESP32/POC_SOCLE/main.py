@@ -1,25 +1,26 @@
-from time import sleep_ms
+import RPi.GPIO as GPIO
+import time
 
 from button.SpecialButton import Button
 from rfid.Rfid import Rfid
+from WebSocketClient import *
 
 from Callback import *
-from wireless_manager import *
 from Tester import TestLauncher
 
 from DisplayError import DisplayError
 
-PIN_BUTTON = 33
-
-wirelessManager = WirelessManager(wsCallback=WebsocketCallback())
-button = Button(PIN_BUTTON, ClickButtonCallback(wirelessManager))
-rfid = Rfid(RfidCallback(wirelessManager))
+PIN_BUTTON = 17
+ws_client = WebSocketClient("ws://192.168.42.82:8080", WebsocketCallback())
+rfid = Rfid(RfidCallback(ws_client))
+button = Button(PIN_BUTTON, ClickButtonCallback(ws_client))
+ws_client.start()
 
 # TESTS
 objects_to_test = [
+    ws_client,
     rfid,
     button,
-    wirelessManager,
 ]
 testLauncher = TestLauncher.debug_mode()
 if testLauncher.test_objects(objects_to_test):
@@ -28,8 +29,7 @@ if testLauncher.test_objects(objects_to_test):
         while True:
             button.process()
             rfid.process()
-            wirelessManager.process()
-            sleep_ms(50)
+            time.sleep(0.05)
 
     except KeyboardInterrupt:
         pass
@@ -38,3 +38,4 @@ else:
         DisplayError.print_error(testLauncher.get_class_name())
     except KeyboardInterrupt:
         pass
+GPIO.cleanup()
