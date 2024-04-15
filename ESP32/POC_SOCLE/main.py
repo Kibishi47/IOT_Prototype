@@ -9,6 +9,7 @@ from Callback import *
 from Tester import TestLauncher
 
 from DisplayError import DisplayError
+GPIO.setmode(GPIO.BCM)
 
 PIN_BUTTON = 17
 ws_client = WebSocketClient("ws://192.168.42.82:8080", WebsocketCallback())
@@ -27,8 +28,8 @@ if testLauncher.test_objects(objects_to_test):
     try:
         # RUN
         while True:
-            button.process()
             rfid.process()
+            button.process()
             time.sleep(0.05)
 
     except KeyboardInterrupt:

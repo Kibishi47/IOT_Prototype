@@ -75,7 +75,6 @@ class Button(Testable):
         self.setup()
 
     def setup(self):
-        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.nb, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def process(self):
