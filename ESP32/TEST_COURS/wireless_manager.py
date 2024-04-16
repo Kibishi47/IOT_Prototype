@@ -54,5 +54,5 @@ class WirelessManager(Testable):
             self.server.process_all()
 
     def test(self):
-        return True
+        return self.server.isConnected
     
