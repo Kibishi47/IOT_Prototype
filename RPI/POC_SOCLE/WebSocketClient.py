@@ -4,7 +4,7 @@ from Tester import Testable
 import time
 
 class WebSocketClient(Thread, Testable):
-    def __init__(self, uri, delegate):
+    def __init__(self, uri, delegate=None):
         super().__init__()
         self.uri = uri
         self.delegate = delegate
@@ -33,7 +33,7 @@ class WebSocketClient(Thread, Testable):
 
     def on_error(self, ws, error):
         if self.delegate:
-            self.delegate.on_error(error)
+            self.delegate.on_error(ws, error)
 
     def on_close(self, ws):
         self.connected = False

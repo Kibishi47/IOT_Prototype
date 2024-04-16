@@ -11,7 +11,8 @@ class WebsocketCallback(WebSocketDelegate):
         print("Connection opened")
 
     def on_message(self, message):
-        print(f"My received: {message}")
+        # print(f"My received: {message}")
+        pass
 
     def on_error(self, error):
         print(f"Error: {error}")
