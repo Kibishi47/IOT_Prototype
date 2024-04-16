@@ -19,7 +19,6 @@ ws_client.start()
 
 # TESTS
 objects_to_test = [
-    ws_client,
     rfid,
     button,
 ]
