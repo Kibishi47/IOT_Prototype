@@ -20,6 +20,7 @@ ws_client.start()
 # TESTS
 objects_to_test = [
     rfid,
+    ws_client,
     button,
 ]
 testLauncher = TestLauncher.debug_mode()
